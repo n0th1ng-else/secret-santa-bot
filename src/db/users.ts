@@ -28,7 +28,8 @@ export class UsersClient {
 
   public getLangId(
     chatId: number,
-    username: string,
+    userName: string,
+    userLogin: string,
     langId: LanguageCode
   ): Promise<LanguageCode> {
     return this.getRows(chatId)
@@ -38,20 +39,20 @@ export class UsersClient {
           return row;
         }
 
-        return this.createRow(chatId, langId, username);
+        return this.createRow(chatId, userName, userLogin, langId);
       })
       .then((row) => getLanguageByText(row.lang_id));
   }
 
   private createRow(
     chatId: number,
-    langId: LanguageCode,
     userName = "",
-    userLogin = ""
+    userLogin = "",
+    langId: LanguageCode
   ): Promise<UserRowScheme> {
     logger.info("Creating a new row");
     return this.db
-      .createRow(chatId, langId, userName, userLogin)
+      .createRow(chatId, userName, userLogin, langId)
       .then((row) => {
         const usageId = this.db.getId(row);
         logger.info(`The row with id=${usageId} has been created`);

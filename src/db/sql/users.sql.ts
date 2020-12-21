@@ -29,7 +29,7 @@ const updateRow = `
 const getRows = `
       SELECT user_id, user_name, user_login, chat_id, lang_id, created_at, updated_at 
       FROM users 
-      WHERE user_id=$1 
+      WHERE chat_id=$1 
       ORDER BY created_at;
     `;
 
