@@ -86,7 +86,7 @@ export class UsersDb {
   public getRows(chatId: number): Promise<UserRowScheme[]> {
     if (!this.initialized) {
       return Promise.reject(
-        new Error("The table usages is not initialized yet")
+        new Error("The table users is not initialized yet")
       );
     }
 
