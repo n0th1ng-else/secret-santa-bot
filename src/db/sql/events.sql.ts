@@ -5,15 +5,15 @@ const createTable = `
         url varchar(100) UNIQUE NOT NULL,
         state varchar(20) NOT NULL,
         name text,
-        budget bigint,
+        budget varchar(100),
         created_at timestamptz NOT NULL,
         updated_at timestamptz NOT NULL
     );
 `;
 
 const insertRow = `
-      INSERT INTO events(event_id, user_id, url, state, budget, created_at, updated_at) 
-      VALUES($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO events(event_id, user_id, url, state, name, budget, created_at, updated_at) 
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING event_id, user_id, url, state, name, budget, created_at, updated_at;
     `;
 

@@ -115,7 +115,11 @@ export class TelegramBotModel {
       return this.actions.start.runAction(msg, model, prefix);
     }
 
-    return this.sendNoContentMessage(model, prefix);
+    if (this.actions.event.runCondition(msg, model)) {
+      return this.actions.event.runAction(msg, model, prefix);
+    }
+
+    return this.actions.event.evalWizardStep(model, prefix);
   }
 
   private static logNotSupportedMessage(
@@ -126,41 +130,6 @@ export class TelegramBotModel {
     return collectAnalytics(
       model.analytics.setCommand("Message is not supported", "/bot")
     );
-  }
-
-  private sendNoContentMessage(
-    model: BotMessageModel,
-    prefix: TelegramMessagePrefix
-  ): Promise<void> {
-    if (model.isGroup) {
-      logger.info(`${prefix.getPrefix()} No content`);
-      return collectAnalytics(
-        model.analytics.setCommand("No content message", "/bot")
-      );
-    }
-
-    logger.info(`${prefix.getPrefix()} Sending no content`);
-    return this.actions.core
-      .getChatLanguage(model, prefix)
-      .then((lang) =>
-        this.actions.core.sendMessage(
-          model.id,
-          model.chatId,
-          LabelId.NoContent,
-          { lang },
-          prefix
-        )
-      )
-      .catch((err) => {
-        const errorMessage = "Unable to send no content";
-        logger.error(`${prefix.getPrefix()} ${errorMessage}`, err);
-        model.analytics.setError(errorMessage);
-      })
-      .then(() =>
-        collectAnalytics(
-          model.analytics.setCommand("No content message", "/bot")
-        )
-      );
   }
 
   private handleCallbackQuery(

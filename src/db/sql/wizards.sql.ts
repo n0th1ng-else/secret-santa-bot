@@ -15,12 +15,20 @@ const insertRow = `
       RETURNING wizard_id, user_id, event_id, step, created_at, updated_at;
     `;
 
-const updateRow = `
+const updateStep = `
       UPDATE wizards SET
         event_id=$1,
         step=$2,
         updated_at=$3
-      WHERE user_id=$4
+      WHERE wizard_id=$4
+      RETURNING wizard_id, user_id, event_id, step, created_at, updated_at;
+    `;
+
+const updateEvent = `
+      UPDATE wizards SET
+        event_id=$1,
+        updated_at=$3
+      WHERE wizard_id=$4
       RETURNING wizard_id, user_id, event_id, step, created_at, updated_at;
     `;
 
@@ -34,6 +42,7 @@ const getRows = `
 export const WizardsSql = {
   createTable,
   insertRow,
-  updateRow,
+  updateEvent,
+  updateStep,
   getRows,
 };
