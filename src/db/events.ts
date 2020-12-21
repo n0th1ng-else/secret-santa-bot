@@ -5,6 +5,7 @@ import { EventRowScheme, EventsDb } from "./sql/events";
 const logger = new Logger("postgres-events");
 
 export enum EventState {
+  Draft = "draft",
   Active = "active",
   Locked = "locked",
   Closed = "closed",
@@ -30,10 +31,10 @@ export class EventsClient {
       });
   }
 
-  private createRow(name: string): Promise<EventRowScheme> {
+  private createRow(eventId: string): Promise<EventRowScheme> {
     logger.info("Creating a new row");
     return this.db
-      .createRow(name, EventState.Active)
+      .createRow(eventId, EventState.Draft)
       .then((row) => {
         const nodeId = this.db.getId(row);
         logger.info(`The row with id=${nodeId} has been created`);
