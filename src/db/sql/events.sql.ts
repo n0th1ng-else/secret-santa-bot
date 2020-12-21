@@ -3,7 +3,7 @@ const createTable = `
         event_id varchar(20) PRIMARY KEY,
         url varchar(100) UNIQUE NOT NULL,
         state varchar(20) NOT NULL,
-        name text NOT NULL,
+        name text,
         budget bigint,
         created_at timestamptz NOT NULL,
         updated_at timestamptz NOT NULL
@@ -11,8 +11,8 @@ const createTable = `
 `;
 
 const insertRow = `
-      INSERT INTO events(event_id, url, state, name, budget, created_at, updated_at) 
-      VALUES($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO events(event_id, url, state, budget, created_at, updated_at) 
+      VALUES($1, $2, $3, $4, $5, $6)
       RETURNING event_id, url, state, name, budget, created_at, updated_at;
     `;
 
@@ -21,7 +21,7 @@ const updateRow = `
         url=$1,
         state=$2,
         name=$3,
-                        budget=$4
+        budget=$4
       WHERE node_id=$4
       RETURNING event_id, url, state, name, budget, created_at, updated_at;
     `;

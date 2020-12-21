@@ -24,7 +24,7 @@ export class EventsDb {
     });
   }
 
-  public createRow(name: string, state: string): Promise<EventRowScheme> {
+  public createRow(eventId: string, state: string): Promise<EventRowScheme> {
     if (!this.initialized) {
       return Promise.reject(
         new Error("The table events is not initialized yet")
@@ -33,12 +33,11 @@ export class EventsDb {
 
     const url = nanoid(15);
     const query = EventsSql.insertRow;
-    const eventId = nanoid(15);
     const budget = 0;
     const createdAt = new Date();
     const updatedAt = createdAt;
 
-    const values = [eventId, url, state, name, budget, createdAt, updatedAt];
+    const values = [eventId, url, state, budget, createdAt, updatedAt];
     return this.pool.query<EventRowScheme>(query, values).then((queryData) => {
       const firstRow = queryData.rows.shift();
       if (!firstRow) {

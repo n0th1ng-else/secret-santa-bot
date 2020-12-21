@@ -17,8 +17,8 @@ const insertRow = `
 
 const updateRow = `
       UPDATE relations SET
-                           agent_id=$1,
-                           updated_at=$2
+        agent_id=$1,
+        updated_at=$2
       WHERE relation_id=$3
       RETURNING relation_id, event_id, user_id, agent_id, created_at, updated_at;
     `;
