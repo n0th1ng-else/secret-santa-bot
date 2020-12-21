@@ -46,9 +46,12 @@ export function isChatGroup(msg: TgMessage): boolean {
   return msg.chat.type !== TgChatType.Private;
 }
 
+export function getUserLogin(msg: TgMessage): string {
+  return (msg.from && msg.from.username) || "";
+}
+
 export function getUserName(msg: TgMessage): string {
-  const fromUserName = msg.from && msg.from.username;
-  return fromUserName || getFullUserName(msg) || getGroupName(msg) || "";
+  return getFullUserName(msg) || getGroupName(msg) || getUserLogin(msg);
 }
 
 export function getFullUserName(msg: TgMessage): string {

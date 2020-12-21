@@ -5,6 +5,7 @@ import {
   getGroupName,
   getRawUserLanguage,
   getUserLanguage,
+  getUserLogin,
   getUserName,
   isChatGroup,
 } from "./helpers";
@@ -25,6 +26,7 @@ export class BotMessageModel {
   public readonly chatId: number;
   public readonly isGroup: boolean;
   public readonly userName: string;
+  public readonly userLogin: string;
   public readonly fullUserName: string;
   public readonly groupName: string;
   public readonly userLanguage: LanguageCode;
@@ -35,6 +37,7 @@ export class BotMessageModel {
     this.chatId = getChatId(msg);
     this.isGroup = isChatGroup(msg);
     this.userName = getUserName(msg);
+    this.userLogin = getUserLogin(msg);
     this.fullUserName = getFullUserName(msg);
     this.groupName = getGroupName(msg);
     this.userLanguage = getUserLanguage(msg);
