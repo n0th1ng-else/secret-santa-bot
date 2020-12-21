@@ -40,7 +40,7 @@ export abstract class GenericAction {
     }
 
     logger.info(`${prefix.getPrefix()} Fetching language`);
-    return this.stat.usages
+    return this.stat.users
       .getLangId(model.chatId, model.name, model.userLanguage)
       .catch((err) => {
         const errorMessage = "Unable to get the lang";
