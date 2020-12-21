@@ -13,7 +13,7 @@
     "test:e2e": "TEST_PACKAGE=e2e jest --coverage",
     "test:unit:watch": "jest --watch",
     "test:e2e:watch": "TEST_PACKAGE=e2e jest --watch",
-    "test": "concurrently \"npm:test:unit\" \"npm:test:e2e\""
+    "test": "concurrently \"npm:test:unit\""
   },
   "dependencies": {
     "@types/express": "4.17.8",
