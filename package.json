@@ -1,0 +1,88 @@
+{
+  "scripts": {
+    "start": "node src/scripts/runTs.js start ts",
+    "dev": "node src/scripts/runTs.js dev ts",
+    "cluster": "node src/scripts/runTs.js cluster ts",
+    "start:js": "node dist/src/scripts/runJs.js start js",
+    "dev:js": "node dist/src/scripts/runJs.js dev js",
+    "cluster:js": "node dist/src/scripts/runJs.js cluster js",
+    "format": "prettier --write",
+    "lint": "eslint",
+    "build": "tsc",
+    "test:unit": "jest --coverage",
+    "test:e2e": "TEST_PACKAGE=e2e jest --coverage",
+    "test:unit:watch": "jest --watch",
+    "test:e2e:watch": "TEST_PACKAGE=e2e jest --watch",
+    "test": "concurrently \"npm:test:unit\" \"npm:test:e2e\""
+  },
+  "dependencies": {
+    "@types/express": "4.17.8",
+    "@types/node": "14.11.5",
+    "@types/parse": "2.12.6",
+    "@types/pg": "7.14.5",
+    "@types/winston-loggly-bulk": "3.0.0",
+    "axios": "0.20.0",
+    "express": "4.17.1",
+    "kleur": "4.1.3",
+    "nanoid": "3.1.12",
+    "ngrok": "3.3.0",
+    "node-fetch": "2.6.1",
+    "parse": "2.16.0",
+    "pg": "8.4.0",
+    "signal-exit": "3.0.3",
+    "strip-ansi": "6.0.0",
+    "ts-node": "9.0.0",
+    "typescript": "4.0.3",
+    "winston": "3.3.3",
+    "winston-loggly-bulk": "3.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.11.6",
+    "@babel/preset-env": "7.11.5",
+    "@babel/preset-typescript": "7.10.4",
+    "@types/supertest": "2.0.10",
+    "@typescript-eslint/eslint-plugin": "4.4.0",
+    "@typescript-eslint/parser": "4.4.0",
+    "babel-jest": "26.5.2",
+    "concurrently": "5.3.0",
+    "eslint": "7.10.0",
+    "eslint-config-prettier": "6.12.0",
+    "husky": "4.3.0",
+    "jest": "26.5.2",
+    "jest-sonar": "0.2.11",
+    "lint-staged": "10.4.0",
+    "nock": "13.0.4",
+    "prettier": "2.1.2",
+    "query-string": "6.13.5",
+    "supertest": "5.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{md,html,yml}": [
+      "npm run format"
+    ],
+    "*.{js,ts,json}": [
+      "npm run format",
+      "npm run lint"
+    ]
+  },
+  "author": "n0th1ng-else",
+  "repository": {
+    "url": "https://github.com/n0th1ng-else/secret-santa-bot"
+  },
+  "bugs": {
+    "url": "https://github.com/n0th1ng-else/secret-santa-bot/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "telegram",
+    "bot",
+    "speech-to-text",
+    "recognition",
+    "express"
+  ]
+}
