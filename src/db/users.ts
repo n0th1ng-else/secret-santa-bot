@@ -44,6 +44,20 @@ export class UsersClient {
       .then((row) => getLanguageByText(row.lang_id));
   }
 
+  public getRows(chatId: number): Promise<UserRowScheme[]> {
+    logger.info(`Looking for rows for chatId=${chatId}`);
+    return this.db
+      .getRows(chatId)
+      .then((rows) => {
+        logger.info(`Row search has been executed for chatId=${chatId}`);
+        return rows;
+      })
+      .catch((err) => {
+        logger.error(`Unable provide a search for chatId=${chatId}`);
+        throw err;
+      });
+  }
+
   private createRow(
     chatId: number,
     userName = "",
@@ -60,20 +74,6 @@ export class UsersClient {
       })
       .catch((err) => {
         logger.error("Unable to create a row");
-        throw err;
-      });
-  }
-
-  private getRows(chatId: number): Promise<UserRowScheme[]> {
-    logger.info(`Looking for rows for chatId=${chatId}`);
-    return this.db
-      .getRows(chatId)
-      .then((rows) => {
-        logger.info(`Row search has been executed for chatId=${chatId}`);
-        return rows;
-      })
-      .catch((err) => {
-        logger.error(`Unable provide a search for chatId=${chatId}`);
         throw err;
       });
   }

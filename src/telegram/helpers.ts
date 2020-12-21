@@ -10,6 +10,13 @@ export function isHelloMessage(
   return isCommandMessage(model, msg, BotCommand.Start);
 }
 
+export function isEventMessage(
+  model: BotMessageModel,
+  msg: TgMessage
+): boolean {
+  return isCommandMessage(model, msg, BotCommand.Event);
+}
+
 function isCommandMessage(
   model: BotMessageModel,
   msg: TgMessage,

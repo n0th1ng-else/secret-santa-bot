@@ -31,10 +31,14 @@ export class EventsClient {
       });
   }
 
-  private createRow(eventId: string): Promise<EventRowScheme> {
+  public createRow(
+    eventId: string,
+    userId: string,
+    name: string
+  ): Promise<EventRowScheme> {
     logger.info("Creating a new row");
     return this.db
-      .createRow(eventId, EventState.Draft)
+      .createRow(eventId, userId, name, EventState.Draft)
       .then((row) => {
         const nodeId = this.db.getId(row);
         logger.info(`The row with id=${nodeId} has been created`);

@@ -8,6 +8,7 @@ export enum WizardStep {
   None = "none",
   Name = "name",
   Url = "url",
+  Budget = "budget",
 }
 
 export class WizardsClient {
@@ -30,7 +31,7 @@ export class WizardsClient {
       });
   }
 
-  private createRow(userId: string): Promise<WizardRowScheme> {
+  public createRow(userId: string): Promise<WizardRowScheme> {
     logger.info("Creating a new row");
     return this.db
       .createRow(userId, WizardStep.Name)
@@ -43,5 +44,38 @@ export class WizardsClient {
         logger.error("Unable to create a row");
         throw err;
       });
+  }
+
+  public createRowIfNotExists(userId: string): Promise<WizardRowScheme> {
+    return this.getRows(userId).then((rows) => {
+      const row = rows.shift();
+      if (rows.length) {
+        throw new Error("smething went wrong");
+      }
+
+      if (row) {
+        return this.updateEventId(row.wizard_id);
+      }
+
+      return this.createRow(userId);
+    });
+  }
+
+  public getRows(userId: string): Promise<WizardRowScheme[]> {
+    logger.info(`Looking for rows for userId=${userId}`);
+    return this.db
+      .getRows(userId)
+      .then((rows) => {
+        logger.info(`Row search has been executed for userId=${userId}`);
+        return rows;
+      })
+      .catch((err) => {
+        logger.error(`Unable provide a search for userId=${userId}`);
+        throw err;
+      });
+  }
+
+  public updateEventId(wizardId: string) {
+    return this.db.updateEvent(wizardId);
   }
 }

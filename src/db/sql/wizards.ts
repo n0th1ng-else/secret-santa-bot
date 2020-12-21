@@ -45,19 +45,34 @@ export class WizardsDb {
     });
   }
 
-  public updateRow(
-    userId: string,
-    eventId: string,
-    step: string
-  ): Promise<WizardRowScheme> {
+  public updateEvent(wizardId: string): Promise<WizardRowScheme> {
     if (!this.initialized) {
       return Promise.reject(
         new Error("The table wizards is not initialized yet")
       );
     }
-    const query = WizardsSql.updateRow;
+    const query = WizardsSql.updateEvent;
+    const eventId = nanoid(15);
     const updatedAt = new Date();
-    const values = [eventId, step, updatedAt, userId];
+    const values = [eventId, updatedAt, wizardId];
+    return this.pool.query<WizardRowScheme>(query, values).then((queryData) => {
+      const firstRow = queryData.rows.shift();
+      if (!firstRow) {
+        return Promise.reject(new Error("Unable to get updated row info"));
+      }
+      return firstRow;
+    });
+  }
+
+  public updateStep(wizardId: string, step: string): Promise<WizardRowScheme> {
+    if (!this.initialized) {
+      return Promise.reject(
+        new Error("The table wizards is not initialized yet")
+      );
+    }
+    const query = WizardsSql.updateStep;
+    const updatedAt = new Date();
+    const values = [step, updatedAt, wizardId];
     return this.pool.query<WizardRowScheme>(query, values).then((queryData) => {
       const firstRow = queryData.rows.shift();
       if (!firstRow) {

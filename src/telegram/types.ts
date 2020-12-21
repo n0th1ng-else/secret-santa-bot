@@ -19,10 +19,12 @@ import { AnalyticsData } from "../analytics/api/types";
 
 export enum BotCommand {
   Start = "/start",
+  Event = "/event",
 }
 
 export class BotMessageModel {
   public readonly id: number;
+  public readonly text: string;
   public readonly chatId: number;
   public readonly isGroup: boolean;
   public readonly userName: string;
@@ -34,6 +36,7 @@ export class BotMessageModel {
 
   constructor(msg: TgMessage, analytics: AnalyticsData) {
     this.id = msg.message_id;
+    this.text = msg.text || "";
     this.chatId = getChatId(msg);
     this.isGroup = isChatGroup(msg);
     this.userName = getUserName(msg);
