@@ -2,6 +2,7 @@ import { Pool, types as PGTypes, defaults as PGDefaults } from "pg";
 import { Logger } from "../logger";
 import { flattenPromise } from "../common/helpers";
 import { UsersClient } from "./users";
+import { NodesClient } from "./nodes";
 
 const logger = new Logger("postgres-client");
 
@@ -15,6 +16,7 @@ interface DbConnectionConfig {
 
 export class DbClient {
   public readonly users: UsersClient;
+  public readonly nodes: NodesClient;
 
   private readonly initialized: boolean;
 
@@ -40,6 +42,7 @@ export class DbClient {
     this.setDefaults();
     this.setParsers();
 
+    this.nodes = new NodesClient(pool);
     this.users = new UsersClient(pool);
   }
 
@@ -48,7 +51,9 @@ export class DbClient {
       return Promise.resolve();
     }
 
-    return Promise.all([this.users.init()]).then(flattenPromise);
+    return Promise.all([this.nodes.init(), this.users.init()]).then(
+      flattenPromise
+    );
   }
 
   public setClientName(threadId: number): this {
