@@ -19,6 +19,7 @@ import { AnalyticsData } from "../analytics/api/types";
 
 export enum BotCommand {
   Start = "/start",
+  Event = "/event",
 }
 
 export class BotMessageModel {

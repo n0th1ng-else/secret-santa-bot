@@ -1,8 +1,8 @@
 const createTable = `
     CREATE TABLE IF NOT EXISTS wizards (
         wizard_id varchar(20) PRIMARY KEY,
-        user_id varchar(20) PRIMARY KEY,
-        event_id varchar(20) PRIMARY KEY,
+        user_id varchar(20) NOT NULL,
+        event_id varchar(20) NOT NULL,
         step varchar(20) NOT NULL,
         created_at timestamptz NOT NULL,
         updated_at timestamptz NOT NULL

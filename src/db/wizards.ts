@@ -30,7 +30,7 @@ export class WizardsClient {
       });
   }
 
-  private createRow(userId: string): Promise<WizardRowScheme> {
+  public createRow(userId: string): Promise<WizardRowScheme> {
     logger.info("Creating a new row");
     return this.db
       .createRow(userId, WizardStep.Name)

@@ -4,6 +4,8 @@ import { flattenPromise } from "../common/helpers";
 import { UsersClient } from "./users";
 import { NodesClient } from "./nodes";
 import { RelationsClient } from "./relations";
+import { EventsClient } from "./events";
+import { WizardsClient } from "./wizards";
 
 const logger = new Logger("postgres-client");
 
@@ -19,6 +21,8 @@ export class DbClient {
   public readonly users: UsersClient;
   public readonly nodes: NodesClient;
   public readonly relations: RelationsClient;
+  public readonly events: EventsClient;
+  public readonly wizards: WizardsClient;
 
   private readonly initialized: boolean;
 
@@ -47,6 +51,8 @@ export class DbClient {
     this.nodes = new NodesClient(pool);
     this.users = new UsersClient(pool);
     this.relations = new RelationsClient(pool);
+    this.events = new EventsClient(pool);
+    this.wizards = new WizardsClient(pool);
   }
 
   public init(): Promise<void> {
@@ -58,6 +64,8 @@ export class DbClient {
       this.nodes.init(),
       this.users.init(),
       this.relations.init(),
+      this.events.init(),
+      this.wizards.init(),
     ]).then(flattenPromise);
   }
 

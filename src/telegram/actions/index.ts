@@ -7,16 +7,19 @@ import { TelegramButtonModel } from "../types";
 import { Logger } from "../../logger";
 import { collectAnalytics } from "../../analytics";
 import { CoreAction } from "./common";
+import { EventAction } from "./event";
 
 const logger = new Logger("telegram-bot");
 
 export class BotActions {
   public readonly start: StartAction;
   public readonly core: CoreAction;
+  public readonly event: EventAction;
 
   constructor(stat: DbClient, bot: TelegramApi) {
     this.core = new CoreAction(stat, bot);
     this.start = new StartAction(stat, bot);
+    this.event = new EventAction(stat, bot);
   }
 
   public handleCallback(
