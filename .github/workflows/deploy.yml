@@ -30,7 +30,7 @@ jobs:
 
   heroku-master:
     runs-on: ubuntu-latest
-    name: Deploy to Heroku Master account
+    name: Deploy to Heroku Pod1
     steps:
       - name: App version
         run: echo "Picked the app version ${GITHUB_SHA}"
@@ -52,7 +52,7 @@ jobs:
         run: docker build . --file Dockerfile --build-arg APP_VERSION=${{ env.D_VERSION }} --tag ${{ env.D_REGISTRY }}/${{ env.D_NAME }}/web
         env:
           D_REGISTRY: registry.heroku.com
-          D_NAME: ${{ secrets.HEROKU_APP_MASTER }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD1 }}
           D_VERSION: ${{ github.sha }}
 
       - name: Push docker image
@@ -60,7 +60,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           D_ACTION: push
-          D_NAME: ${{ secrets.HEROKU_APP_MASTER }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD1 }}
           D_VERSION: ${{ github.sha }}
 
       - name: Release docker image
@@ -68,11 +68,11 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           D_ACTION: release
-          D_NAME: ${{ secrets.HEROKU_APP_MASTER }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD1 }}
 
   heroku-slave:
     runs-on: ubuntu-latest
-    name: Deploy to Heroku Slave account
+    name: Deploy to Heroku Pod2
     needs: heroku-master
     steps:
       - name: App version
@@ -95,7 +95,7 @@ jobs:
         run: docker build . --file Dockerfile --build-arg APP_VERSION=${{ env.D_VERSION }} --tag ${{ env.D_REGISTRY }}/${{ env.D_NAME }}/web
         env:
           D_REGISTRY: registry.heroku.com
-          D_NAME: ${{ secrets.HEROKU_APP_SLAVE }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD2 }}
           D_VERSION: ${{ github.sha }}
 
       - name: Push docker image
@@ -103,7 +103,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           D_ACTION: push
-          D_NAME: ${{ secrets.HEROKU_APP_SLAVE }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD2 }}
           D_VERSION: ${{ github.sha }}
 
       - name: Release docker image
@@ -111,4 +111,4 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           D_ACTION: release
-          D_NAME: ${{ secrets.HEROKU_APP_SLAVE }}
+          D_NAME: ${{ secrets.HEROKU_APP_POD2 }}
