@@ -8,6 +8,7 @@ import { collectAnalytics } from "../../analytics";
 import { LanguageCode } from "../../text/types";
 import { EventRowScheme } from "../../db/sql/events";
 import { formEventDetails } from "../messages";
+import { EventState } from "../../db/events";
 
 const logger = new Logger("telegram-bot");
 
@@ -98,6 +99,19 @@ export class StartAction extends GenericAction {
     event: EventRowScheme,
     userId: string
   ) {
+    const isActivated = event.state === EventState.Locked;
+    if (isActivated) {
+      return this.getChatLanguage(model, prefix).then((lang) =>
+        this.sendMessage(
+          model.id,
+          model.chatId,
+          [LabelId.AlreadyActive],
+          { lang },
+          prefix
+        )
+      );
+    }
+
     return this.stat.relations
       .createRow(event.event_id, userId)
       .then(() => this.getChatLanguage(model, prefix))
