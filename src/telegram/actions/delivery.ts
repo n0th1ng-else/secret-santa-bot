@@ -88,7 +88,7 @@ export class DeliveryAction extends GenericAction {
     lang: LanguageCode
   ) {
     return this.stat.users.getUser(agentId).then((agent) => {
-      const title = this.text.t(LabelId.ShareTitleText, lang);
+      const title = this.text.t(LabelId.AgentTitleText, lang);
       const messages = [title, formUserDetails(lang, agent)];
 
       return this.sendRawMessage(model.chatId, messages.join("\n"));

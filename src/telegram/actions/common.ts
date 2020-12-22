@@ -96,17 +96,12 @@ export abstract class GenericAction {
   public editMessage(
     chatId: number,
     messageId: number,
-    meta: MessageOptions,
-    id: LabelId,
-    prefix: TelegramMessagePrefix
+    text: string,
+    prefix: TelegramMessagePrefix,
+    options?: TgInlineKeyboardButton[][]
   ): Promise<void> {
     return this.bot
-      .editMessageText(
-        chatId,
-        messageId,
-        this.text.t(id, meta.lang),
-        meta.options
-      )
+      .editMessageText(chatId, messageId, text, options)
       .then(() => logger.info(`${prefix.getPrefix()} Updated message`))
       .catch((err) => {
         logger.error(`${prefix.getPrefix()} Unable to update the message`, err);

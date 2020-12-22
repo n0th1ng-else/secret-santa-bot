@@ -154,7 +154,7 @@ export class ActivateAction extends GenericAction {
       this.stat.users.getUser(agentId),
     ])
       .then(([user, agent]) => {
-        const title = this.text.t(LabelId.ShareTitleText, lang);
+        const title = this.text.t(LabelId.AgentTitleText, lang);
         const messages = [eventDetails, title, formUserDetails(lang, agent)];
 
         return this.sendRawMessage(user.chat_id, messages.join("\n"));

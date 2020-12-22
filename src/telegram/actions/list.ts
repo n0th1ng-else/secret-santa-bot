@@ -12,6 +12,7 @@ import { Logger } from "../../logger";
 import { LanguageCode } from "../../text/types";
 import { RelationRowScheme } from "../../db/sql/relations";
 import { AnalyticsData } from "../../analytics/api/types";
+import { formEventDetails } from "../messages";
 
 const logger = new Logger("telegram-bot");
 
@@ -71,8 +72,8 @@ export class ListAction extends GenericAction {
     return Promise.all(
       rows.map((row) => this.stat.events.getEvent(row.event_id))
     ).then((events) => {
-      const buttons: TgInlineKeyboardButton[] = events.reduce<
-        TgInlineKeyboardButton[]
+      const buttons: TgInlineKeyboardButton[][] = events.reduce<
+        TgInlineKeyboardButton[][]
       >((list, event) => {
         if (!event) {
           return list;
@@ -84,20 +85,22 @@ export class ListAction extends GenericAction {
           prefix.id
         ).getDtoString();
 
-        const isOwned = event.user_id === userId ? "😎 " : "";
+        const isOwned = event.user_id === userId ? "🌚 " : "";
 
-        list.push({
-          callback_data: dto,
-          text: `${isOwned}${event.name}`,
-        });
+        list.push([
+          {
+            callback_data: dto,
+            text: `${isOwned}${event.name}`,
+          },
+        ]);
         return list;
-      }, [] as TgInlineKeyboardButton[]);
+      }, [] as TgInlineKeyboardButton[][]);
 
       return this.sendMessage(
         model.id,
         model.chatId,
         [LabelId.EventListMessage],
-        { lang, options: [buttons] },
+        { lang, options: buttons },
         prefix
       );
     });
@@ -124,17 +127,16 @@ export class ListAction extends GenericAction {
       )
       .then(([userId, lang, relation, event]) => {
         if (!relation || !event) {
-          return this.sendMessage(
-            model.id,
+          return this.editMessage(
             model.chatId,
-            [LabelId.RelationNotFound],
-            { lang },
+            msg.message_id,
+            this.text.t(LabelId.RelationNotFound, lang),
             prefix
           );
         }
 
         const isAdmin = event.user_id === userId;
-        const isOwned = isAdmin ? "😎 " : "";
+        const isOwned = isAdmin ? "🌚 " : "";
 
         const myBuddyBtn = new TelegramButtonModel(
           TelegramButtonType.Delivery,
@@ -154,6 +156,12 @@ export class ListAction extends GenericAction {
           prefix.id
         );
 
+        const participantsBtn = new TelegramButtonModel(
+          TelegramButtonType.Participants,
+          event.event_id,
+          prefix.id
+        );
+
         const btns: TgInlineKeyboardButton[][] = [
           [
             {
@@ -167,6 +175,12 @@ export class ListAction extends GenericAction {
               callback_data: eventLinkBtn.getDtoString(),
             },
           ],
+          [
+            {
+              text: this.text.t(LabelId.ParticipantsBtn, lang),
+              callback_data: participantsBtn.getDtoString(),
+            },
+          ],
         ];
 
         if (isAdmin) {
@@ -178,9 +192,11 @@ export class ListAction extends GenericAction {
           ]);
         }
 
-        return this.sendRawMessage(
+        return this.editMessage(
           model.chatId,
-          `${isOwned}${event.name}`,
+          msg.message_id,
+          `${isOwned}${formEventDetails(lang, event)}`,
+          prefix,
           btns
         );
       });
