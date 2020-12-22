@@ -9,6 +9,7 @@ import { collectAnalytics } from "../../analytics";
 import { CoreAction } from "./common";
 import { EventAction } from "./event";
 import { ListAction } from "./list";
+import { LinkAction } from "./link";
 
 const logger = new Logger("telegram-bot");
 
@@ -17,12 +18,14 @@ export class BotActions {
   public readonly core: CoreAction;
   public readonly event: EventAction;
   public readonly list: ListAction;
+  public readonly link: LinkAction;
 
   constructor(stat: DbClient, bot: TelegramApi) {
     this.core = new CoreAction(stat, bot);
     this.start = new StartAction(stat, bot);
     this.event = new EventAction(stat, bot);
     this.list = new ListAction(stat, bot);
+    this.link = new LinkAction(stat, bot);
   }
 
   public handleCallback(
@@ -55,6 +58,8 @@ export class BotActions {
         switch (button.id) {
           case TelegramButtonType.Event:
             return this.list.runCallback(message, button, analytics);
+          case TelegramButtonType.EventLink:
+            return this.link.runCallback(message, button, analytics);
           default:
             throw new Error("Unknown type passed in callback query");
         }

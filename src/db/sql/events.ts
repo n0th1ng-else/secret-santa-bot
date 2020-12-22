@@ -8,6 +8,7 @@ export interface EventRowScheme {
   url: string;
   state: string;
   name: string;
+  budget: string;
   created_at: Date;
   updated_at: Date;
 }

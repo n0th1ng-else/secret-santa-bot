@@ -17,10 +17,10 @@ export class StartAction extends GenericAction {
     prefix: TelegramMessagePrefix
   ): Promise<void> {
     const text = (msg && msg.text) || "";
-    const [, eventId] = text.split(" ");
+    const [, urlId] = text.split(" ");
 
-    if (eventId) {
-      return this.checkUserAndJoinEvent(eventId, mdl, prefix);
+    if (urlId) {
+      return this.checkUserAndJoinEvent(urlId, mdl, prefix);
     }
 
     return this.sendHelloMessage(mdl, prefix);
@@ -59,7 +59,7 @@ export class StartAction extends GenericAction {
   }
 
   private checkUserAndJoinEvent(
-    eventId: string,
+    urlId: string,
     model: BotMessageModel,
     prefix: TelegramMessagePrefix
   ) {
@@ -70,22 +70,47 @@ export class StartAction extends GenericAction {
         model.userLogin,
         LanguageCode.Ru
       ) // TODO model.userLanguage
-      .then((user) => this.findAndJoinEvent(eventId, user.user_id));
+      .then((user) =>
+        this.findAndJoinEvent(model, prefix, urlId, user.user_id)
+      );
   }
 
-  private findAndJoinEvent(eventId: string, userId: string) {
-    return this.stat.events.getEvent(eventId).then((event) => {
-      if (!event) {
+  private findAndJoinEvent(
+    model: BotMessageModel,
+    prefix: TelegramMessagePrefix,
+    urlId: string,
+    userId: string
+  ) {
+    return this.stat.events.getRows(urlId).then((events) => {
+      const event = events.shift();
+      if (!event || events.length) {
         throw new Error("event not found"); // TODO
       }
 
-      return this.joinEvent(event, userId);
+      return this.joinEvent(model, prefix, event, userId);
     });
   }
 
-  private joinEvent(event: EventRowScheme, userId: string) {
-    return this.stat.relations.createRow(event.event_id, userId).then(() => {
-      // TODO
-    });
+  private joinEvent(
+    model: BotMessageModel,
+    prefix: TelegramMessagePrefix,
+    event: EventRowScheme,
+    userId: string
+  ) {
+    return this.stat.relations
+      .createRow(event.event_id, userId)
+      .then(() => this.getChatLanguage(model, prefix))
+      .then((lang) => {
+        const title = this.text.t(LabelId.JoinedEventText, lang);
+        const name = this.text.t(LabelId.ShareNameText, lang);
+        const budget = this.text.t(LabelId.ShareBudgetText, lang);
+
+        const messages = [title, `${name} ${event.name}`];
+        if (event.budget) {
+          messages.push(`${budget} ${event.budget}`);
+        }
+
+        return this.sendRawMessage(model.chatId, messages.join("\n"));
+      });
   }
 }

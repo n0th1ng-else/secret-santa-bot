@@ -6,8 +6,6 @@ import { LabelId } from "../../text/labels";
 import { Logger } from "../../logger";
 import { collectAnalytics } from "../../analytics";
 import { WizardRowScheme } from "../../db/sql/wizards";
-import { WizardStep } from "../../db/wizards";
-import { flattenPromise } from "../../common/helpers";
 
 const logger = new Logger("telegram-bot");
 
@@ -22,18 +20,6 @@ export class EventAction extends GenericAction {
 
   public runCondition(msg: TgMessage, mdl: BotMessageModel): boolean {
     return isEventMessage(mdl, msg);
-  }
-
-  public evalWizardStep(model: BotMessageModel, prefix: TelegramMessagePrefix) {
-    return this.getWizardStep(model, prefix).then((row) => {
-      switch (row.step) {
-        case WizardStep.Name:
-          return this.createEvent(row, model, prefix);
-        case WizardStep.Url:
-        case WizardStep.Budget:
-        default:
-      }
-    });
   }
 
   private sendEventMessage(
@@ -74,51 +60,5 @@ export class EventAction extends GenericAction {
     return this.getUserId(model, prefix).then((userId) =>
       this.stat.wizards.createRowIfNotExists(userId)
     );
-  }
-
-  private getUserId(
-    model: BotMessageModel,
-    prefix: TelegramMessagePrefix
-  ): Promise<string> {
-    return this.stat.users.getRows(model.chatId).then((rows) => {
-      const row = rows.shift();
-      if (!row || rows.length) {
-        throw new Error("something went wrong"); // TODO
-      }
-      return row.user_id;
-    });
-  }
-
-  private getWizardStep(
-    model: BotMessageModel,
-    prefix: TelegramMessagePrefix
-  ): Promise<WizardRowScheme> {
-    return this.getUserId(model, prefix)
-      .then((userId) => this.stat.wizards.getRows(userId))
-      .then((rows) => {
-        const row = rows.shift();
-        if (!row || rows.length) {
-          throw new Error("something went wrong"); // TODO
-        }
-        return row;
-      });
-  }
-
-  private createEvent(
-    row: WizardRowScheme,
-    model: BotMessageModel,
-    prefix: TelegramMessagePrefix
-  ) {
-    return this.stat.events
-      .createRow(row.event_id, row.user_id, model.text)
-      .then(() => this.stat.relations.createRow(row.event_id, row.user_id))
-      .then((relation) => {
-        const eventId = relation.event_id;
-        return this.sendRawMessage(
-          model.chatId,
-          `t.me/SantaAnonBot?start=${eventId}`
-        );
-      })
-      .then(flattenPromise);
   }
 }

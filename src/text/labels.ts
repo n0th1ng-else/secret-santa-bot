@@ -10,6 +10,11 @@ export enum LabelId {
   MyBuddyBtn,
   EventLinkBtn,
   ActivateBtn,
+  ShareTitleText,
+  ShareNameText,
+  ShareBudgetText,
+  ShareLinkText,
+  JoinedEventText,
 }
 
 export const labels = {
@@ -23,6 +28,11 @@ export const labels = {
     [LabelId.MyBuddyBtn]: "Кому я дарю подарок",
     [LabelId.EventLinkBtn]: "Поделиться ссылкой",
     [LabelId.ActivateBtn]: "Разыграть тайного санту!",
+    [LabelId.ShareTitleText]: "Участвуй в розыгрыше тайного санты!",
+    [LabelId.ShareNameText]: "Розыгрыш:",
+    [LabelId.ShareBudgetText]: "Бюджет:",
+    [LabelId.ShareLinkText]: "Присоединяйся!",
+    [LabelId.JoinedEventText]: "Вы участвуете!",
   },
   [LanguageCode.En]: {},
 };

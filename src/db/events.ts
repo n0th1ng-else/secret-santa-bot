@@ -54,7 +54,7 @@ export class EventsClient {
     return this.db.getRow(eventId);
   }
 
-  private getRows(url: string): Promise<EventRowScheme[]> {
+  public getRows(url: string): Promise<EventRowScheme[]> {
     logger.info(`Looking for rows for url=${url}`);
     return this.db
       .getRows(url)
