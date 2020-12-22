@@ -37,10 +37,10 @@ const getUsers = `
       ORDER BY created_at;
 `;
 
-const getAgent = `
+const getRow = `
       SELECT relation_id, event_id, user_id, agent_id, created_at, updated_at 
       FROM relations 
-      WHERE user_id=$1 AND event_id=$2
+      WHERE event_id=$1 AND user_id=$2
       ORDER BY created_at;`;
 
 export const RelationsSql = {
@@ -49,5 +49,5 @@ export const RelationsSql = {
   updateRow,
   getEvents,
   getUsers,
-  getAgent,
+  getRow,
 };

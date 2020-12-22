@@ -38,7 +38,7 @@ export class EventsClient {
   ): Promise<EventRowScheme> {
     logger.info("Creating a new row");
     return this.db
-      .createRow(eventId, userId, name, EventState.Draft)
+      .createRow(eventId, userId, name, EventState.Active)
       .then((row) => {
         const nodeId = this.db.getId(row);
         logger.info(`The row with id=${nodeId} has been created`);
@@ -48,6 +48,10 @@ export class EventsClient {
         logger.error("Unable to create a row");
         throw err;
       });
+  }
+
+  public getEvent(eventId: string): Promise<EventRowScheme | undefined> {
+    return this.db.getRow(eventId);
   }
 
   private getRows(url: string): Promise<EventRowScheme[]> {

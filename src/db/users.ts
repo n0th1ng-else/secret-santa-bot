@@ -26,22 +26,34 @@ export class UsersClient {
       });
   }
 
+  public createRowIfNotExists(
+    chatId: number,
+    userName: string,
+    userLogin: string,
+    langId: LanguageCode
+  ): Promise<UserRowScheme> {
+    return this.getRows(chatId).then((rows) => {
+      const row = rows.shift();
+      if (row) {
+        return row;
+      }
+
+      return this.createRow(chatId, userName, userLogin, langId);
+    });
+  }
+
   public getLangId(
     chatId: number,
     userName: string,
     userLogin: string,
     langId: LanguageCode
   ): Promise<LanguageCode> {
-    return this.getRows(chatId)
-      .then((rows) => {
-        const row = rows.shift();
-        if (row) {
-          return row;
-        }
-
-        return this.createRow(chatId, userName, userLogin, langId);
-      })
-      .then((row) => getLanguageByText(row.lang_id));
+    return this.createRowIfNotExists(
+      chatId,
+      userName,
+      userLogin,
+      langId
+    ).then((row) => getLanguageByText(row.lang_id));
   }
 
   public getRows(chatId: number): Promise<UserRowScheme[]> {

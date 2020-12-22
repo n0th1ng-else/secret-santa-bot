@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { Logger } from "../logger";
-import { RelationsDb } from "./sql/relations";
+import { RelationRowScheme, RelationsDb } from "./sql/relations";
 
 const logger = new Logger("postgres-relations");
 
@@ -22,5 +22,18 @@ export class RelationsClient {
         logger.error(`Unable to initialize ${Logger.y("relations")} table`);
         throw err;
       });
+  }
+
+  public createRow(
+    eventId: string,
+    userId: string
+  ): Promise<RelationRowScheme> {
+    return this.db.getRow(eventId, userId).then((row) => {
+      if (row) {
+        return row;
+      }
+
+      return this.db.createRow(eventId, userId);
+    });
   }
 }

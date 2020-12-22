@@ -7,26 +7,31 @@ export function isHelloMessage(
   model: BotMessageModel,
   msg: TgMessage
 ): boolean {
-  return isCommandMessage(model, msg, BotCommand.Start);
+  const text = (msg && msg.text) || "";
+  const parts = text.split(" ");
+  if (parts.length > 2) {
+    return false;
+  }
+  return isCommandMessage(model, BotCommand.Start, parts[0]);
 }
 
 export function isEventMessage(
   model: BotMessageModel,
   msg: TgMessage
 ): boolean {
-  return isCommandMessage(model, msg, BotCommand.Event);
+  return isCommandMessage(model, BotCommand.Event, msg && msg.text);
 }
 
 function isCommandMessage(
   model: BotMessageModel,
-  msg: TgMessage,
-  command: BotCommand
+  command: BotCommand,
+  text?: string
 ): boolean {
-  if (!msg || !msg.text) {
+  if (!text) {
     return false;
   }
 
-  if (msg.text === command) {
+  if (text === command) {
     return true;
   }
 
@@ -36,7 +41,7 @@ function isCommandMessage(
 
   return (
     model.isGroup &&
-    msg.text.toLowerCase() === `${command}@${telegramBotName.toLowerCase()}`
+    text.toLowerCase() === `${command}@${telegramBotName.toLowerCase()}`
   );
 }
 

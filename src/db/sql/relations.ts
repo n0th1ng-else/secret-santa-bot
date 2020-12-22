@@ -25,8 +25,8 @@ export class RelationsDb {
   }
 
   public createRow(
-    userId: string,
-    eventId: string
+    eventId: string,
+    userId: string
   ): Promise<RelationRowScheme> {
     if (!this.initialized) {
       return Promise.reject(
@@ -98,20 +98,23 @@ export class RelationsDb {
       .then((queryData) => queryData.rows);
   }
 
-  public getAgent(
-    userId: string,
-    eventId: string
-  ): Promise<RelationRowScheme[]> {
+  public getRow(
+    eventId: string,
+    userId: string
+  ): Promise<RelationRowScheme | undefined> {
     if (!this.initialized) {
       return Promise.reject(
         new Error("The table relations is not initialized yet")
       );
     }
-    const query = RelationsSql.getAgent;
-    const values = [userId, eventId];
+    const query = RelationsSql.getRow;
+    const values = [eventId, userId];
     return this.pool
       .query<RelationRowScheme>(query, values)
-      .then((queryData) => queryData.rows);
+      .then((queryData) => {
+        const row = queryData.rows.shift();
+        return row;
+      });
   }
 
   public getId(row: RelationRowScheme): string {
