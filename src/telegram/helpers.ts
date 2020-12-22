@@ -130,6 +130,8 @@ export function getButtonTypeByText(type: string): TelegramButtonType {
       return TelegramButtonType.EventLink;
     case TelegramButtonType.Activate:
       return TelegramButtonType.Activate;
+    case TelegramButtonType.Participants:
+      return TelegramButtonType.Participants;
     default:
       return TelegramButtonType.Unknown;
   }
