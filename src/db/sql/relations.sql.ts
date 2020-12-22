@@ -27,7 +27,7 @@ const getEvents = `
       SELECT relation_id, event_id, user_id, agent_id, created_at, updated_at 
       FROM relations 
       WHERE user_id=$1 
-      ORDER BY created_at;
+      ORDER BY created_at DESC;
 `;
 
 const getUsers = `
