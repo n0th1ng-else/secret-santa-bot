@@ -93,6 +93,7 @@ export enum TelegramButtonType {
   Delivery = "d",
   EventLink = "el",
   Activate = "a",
+  Participants = "p",
 }
 
 export class TelegramButtonModel {
