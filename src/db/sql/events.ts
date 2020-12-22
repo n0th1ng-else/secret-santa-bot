@@ -4,6 +4,7 @@ import { EventsSql } from "./events.sql";
 
 export interface EventRowScheme {
   event_id: string;
+  user_id: string;
   url: string;
   state: string;
   name: string;

@@ -28,12 +28,23 @@ export class RelationsClient {
     eventId: string,
     userId: string
   ): Promise<RelationRowScheme> {
-    return this.db.getRow(eventId, userId).then((row) => {
+    return this.getRelation(eventId, userId).then((row) => {
       if (row) {
         return row;
       }
 
       return this.db.createRow(eventId, userId);
     });
+  }
+
+  public getRelation(
+    eventId: string,
+    userId: string
+  ): Promise<RelationRowScheme | undefined> {
+    return this.db.getRow(eventId, userId);
+  }
+
+  public getEvents(userId: string) {
+    return this.db.getEvents(userId);
   }
 }
