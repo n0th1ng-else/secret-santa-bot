@@ -5,10 +5,8 @@ import { EventRowScheme, EventsDb } from "./sql/events";
 const logger = new Logger("postgres-events");
 
 export enum EventState {
-  Draft = "draft",
   Active = "active",
   Locked = "locked",
-  Closed = "closed",
 }
 
 export class EventsClient {
@@ -66,5 +64,9 @@ export class EventsClient {
         logger.error(`Unable provide a search for url=${url}`);
         throw err;
       });
+  }
+
+  public lockEvent(eventId: string) {
+    return this.db.setEventState(eventId, EventState.Locked);
   }
 }

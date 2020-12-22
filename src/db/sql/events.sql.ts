@@ -23,7 +23,7 @@ const updateRow = `
         state=$2,
         name=$3,
         budget=$4
-      WHERE node_id=$4
+      WHERE event_id=$5
       RETURNING event_id, user_id, url, state, name, budget, created_at, updated_at;
     `;
 
@@ -41,10 +41,19 @@ const getRow = `
       ORDER BY created_at;
     `;
 
+const setRowState = `
+      UPDATE events SET
+        state=$1,
+        updated_at=$2
+      WHERE event_id=$3
+      RETURNING event_id, user_id, url, state, name, budget, created_at, updated_at;
+    `;
+
 export const EventsSql = {
   createTable,
   insertRow,
   updateRow,
   getRows,
   getRow,
+  setRowState,
 };

@@ -10,6 +10,7 @@ import {
   TgFile,
   TgInlineKeyboardButton,
   TgMessage,
+  TgParseMode,
   TgWebHook,
 } from "./types";
 
@@ -71,6 +72,7 @@ export class TelegramApi {
     const data: MessageDto = {
       text,
       chat_id: chatId,
+      parse_mode: TgParseMode.Html,
     };
 
     if (buttons) {
@@ -92,6 +94,7 @@ export class TelegramApi {
       text,
       chat_id: chatId,
       message_id: messageId,
+      parse_mode: TgParseMode.Html,
     };
 
     if (buttons) {

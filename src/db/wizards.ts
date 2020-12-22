@@ -50,11 +50,11 @@ export class WizardsClient {
     return this.getRows(userId).then((rows) => {
       const row = rows.shift();
       if (rows.length) {
-        throw new Error("smething went wrong");
+        throw new Error("something went wrong");
       }
 
       if (row) {
-        return this.updateEventId(row.wizard_id);
+        return this.updateEventId(row.wizard_id, WizardStep.Name);
       }
 
       return this.createRow(userId);
@@ -79,7 +79,7 @@ export class WizardsClient {
     return this.db.updateStep(wizardId, WizardStep.None);
   }
 
-  public updateEventId(wizardId: string) {
-    return this.db.updateEvent(wizardId);
+  public updateEventId(wizardId: string, step: string) {
+    return this.db.updateEvent(wizardId, step);
   }
 }

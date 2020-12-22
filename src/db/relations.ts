@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 import { Logger } from "../logger";
 import { RelationRowScheme, RelationsDb } from "./sql/relations";
+import { flattenPromise } from "../common/helpers";
 
 const logger = new Logger("postgres-relations");
 
@@ -46,5 +47,18 @@ export class RelationsClient {
 
   public getEvents(userId: string) {
     return this.db.getEvents(userId);
+  }
+
+  public getParticipants(eventId: string) {
+    return this.db.getUsers(eventId);
+  }
+
+  public assignAgents(eventId: string, order: string[]): Promise<void> {
+    return Promise.all(
+      order.map((agentId, indx) => {
+        const userId = !indx ? order[order.length - 1] : order[indx - 1];
+        return this.db.assignAgent(eventId, userId, agentId);
+      })
+    ).then(flattenPromise);
   }
 }

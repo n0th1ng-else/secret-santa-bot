@@ -114,6 +114,22 @@ export class EventsDb {
       .then((queryData) => queryData.rows.shift());
   }
 
+  public setEventState(eventId: string, state: string) {
+    if (!this.initialized) {
+      return Promise.reject(
+        new Error("The table events is not initialized yet")
+      );
+    }
+
+    const query = EventsSql.setRowState;
+    const updatedAt = new Date();
+    const values = [state, updatedAt, eventId];
+
+    return this.pool
+      .query<EventRowScheme>(query, values)
+      .then((queryData) => queryData.rows.shift());
+  }
+
   public getId(row: EventRowScheme): string {
     return row.event_id;
   }

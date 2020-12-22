@@ -49,29 +49,6 @@ export class RelationsDb {
       });
   }
 
-  public updateRow(
-    relationId: string,
-    agentId: string
-  ): Promise<RelationRowScheme> {
-    if (!this.initialized) {
-      return Promise.reject(
-        new Error("The table relations is not initialized yet")
-      );
-    }
-    const query = RelationsSql.updateRow;
-    const updatedAt = new Date();
-    const values = [agentId, updatedAt, relationId];
-    return this.pool
-      .query<RelationRowScheme>(query, values)
-      .then((queryData) => {
-        const firstRow = queryData.rows.shift();
-        if (!firstRow) {
-          return Promise.reject(new Error("Unable to get updated row info"));
-        }
-        return firstRow;
-      });
-  }
-
   public getUsers(eventId: string): Promise<RelationRowScheme[]> {
     if (!this.initialized) {
       return Promise.reject(
@@ -109,6 +86,28 @@ export class RelationsDb {
     }
     const query = RelationsSql.getRow;
     const values = [eventId, userId];
+    return this.pool
+      .query<RelationRowScheme>(query, values)
+      .then((queryData) => {
+        const row = queryData.rows.shift();
+        return row;
+      });
+  }
+
+  public assignAgent(
+    eventId: string,
+    userId: string,
+    agentId: string
+  ): Promise<RelationRowScheme | undefined> {
+    if (!this.initialized) {
+      return Promise.reject(
+        new Error("The table relations is not initialized yet")
+      );
+    }
+    const query = RelationsSql.assignAgent;
+    const updatedAt = new Date();
+
+    const values = [agentId, updatedAt, eventId, userId];
     return this.pool
       .query<RelationRowScheme>(query, values)
       .then((queryData) => {

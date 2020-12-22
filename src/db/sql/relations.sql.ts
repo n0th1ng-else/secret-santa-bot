@@ -43,6 +43,14 @@ const getRow = `
       WHERE event_id=$1 AND user_id=$2
       ORDER BY created_at;`;
 
+const assignAgent = `
+    UPDATE relations SET
+        agent_id=$1,
+        updated_at=$2
+    WHERE event_id=$3 AND user_id=$4
+    RETURNING relation_id, event_id, user_id, agent_id, created_at, updated_at;
+`;
+
 export const RelationsSql = {
   createTable,
   insertRow,
@@ -50,4 +58,5 @@ export const RelationsSql = {
   getEvents,
   getUsers,
   getRow,
+  assignAgent,
 };
