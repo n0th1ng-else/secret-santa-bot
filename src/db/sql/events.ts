@@ -98,6 +98,20 @@ export class EventsDb {
       .then((queryData) => queryData.rows);
   }
 
+  public getRow(eventId: string): Promise<EventRowScheme | undefined> {
+    if (!this.initialized) {
+      return Promise.reject(
+        new Error("The table events is not initialized yet")
+      );
+    }
+
+    const query = EventsSql.getRow;
+    const values = [eventId];
+    return this.pool
+      .query<EventRowScheme>(query, values)
+      .then((queryData) => queryData.rows.shift());
+  }
+
   public getId(row: EventRowScheme): string {
     return row.event_id;
   }

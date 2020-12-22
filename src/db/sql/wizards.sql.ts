@@ -27,8 +27,8 @@ const updateStep = `
 const updateEvent = `
       UPDATE wizards SET
         event_id=$1,
-        updated_at=$3
-      WHERE wizard_id=$4
+        updated_at=$2
+      WHERE wizard_id=$3
       RETURNING wizard_id, user_id, event_id, step, created_at, updated_at;
     `;
 

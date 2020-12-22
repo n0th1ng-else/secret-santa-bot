@@ -34,9 +34,17 @@ const getRows = `
       ORDER BY created_at;
     `;
 
+const getRow = `
+      SELECT event_id, user_id, url, state, name, budget, created_at, updated_at 
+      FROM events 
+      WHERE event_id=$1 
+      ORDER BY created_at;
+    `;
+
 export const EventsSql = {
   createTable,
   insertRow,
   updateRow,
   getRows,
+  getRow,
 };

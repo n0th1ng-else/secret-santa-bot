@@ -111,6 +111,14 @@ export class EventAction extends GenericAction {
   ) {
     return this.stat.events
       .createRow(row.event_id, row.user_id, model.text)
+      .then(() => this.stat.relations.createRow(row.event_id, row.user_id))
+      .then((relation) => {
+        const eventId = relation.event_id;
+        return this.sendRawMessage(
+          model.chatId,
+          `t.me/SantaAnonBot?start=${eventId}`
+        );
+      })
       .then(flattenPromise);
   }
 }
