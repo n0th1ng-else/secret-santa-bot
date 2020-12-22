@@ -123,7 +123,7 @@ export class TelegramBotModel {
       return this.actions.list.runAction(msg, model, prefix);
     }
 
-    return this.actions.event.evalWizardStep(model, prefix);
+    return this.actions.link.runAction(msg, model, prefix);
   }
 
   private static logNotSupportedMessage(

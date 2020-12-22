@@ -75,6 +75,10 @@ export class WizardsClient {
       });
   }
 
+  public resetRowState(wizardId: string): Promise<WizardRowScheme> {
+    return this.db.updateStep(wizardId, WizardStep.None);
+  }
+
   public updateEventId(wizardId: string) {
     return this.db.updateEvent(wizardId);
   }

@@ -50,6 +50,19 @@ export abstract class GenericAction {
       });
   }
 
+  protected getUserId(
+    model: BotMessageModel,
+    prefix: TelegramMessagePrefix
+  ): Promise<string> {
+    return this.stat.users.getRows(model.chatId).then((rows) => {
+      const row = rows.shift();
+      if (!row || rows.length) {
+        throw new Error("something went wrong"); // TODO
+      }
+      return row.user_id;
+    });
+  }
+
   public sendMessage(
     messageId: number,
     chatId: number,
