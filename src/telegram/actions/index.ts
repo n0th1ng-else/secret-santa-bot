@@ -12,6 +12,7 @@ import { ListAction } from "./list";
 import { LinkAction } from "./link";
 import { DeliveryAction } from "./delivery";
 import { ActivateAction } from "./activate";
+import { TeamAction } from "./team";
 
 const logger = new Logger("telegram-bot");
 
@@ -23,6 +24,7 @@ export class BotActions {
   public readonly link: LinkAction;
   public readonly delivery: DeliveryAction;
   public readonly activate: ActivateAction;
+  public readonly team: TeamAction;
 
   constructor(stat: DbClient, bot: TelegramApi) {
     this.core = new CoreAction(stat, bot);
@@ -32,6 +34,7 @@ export class BotActions {
     this.link = new LinkAction(stat, bot);
     this.delivery = new DeliveryAction(stat, bot);
     this.activate = new ActivateAction(stat, bot);
+    this.team = new TeamAction(stat, bot);
   }
 
   public handleCallback(
@@ -70,6 +73,8 @@ export class BotActions {
             return this.delivery.runCallback(message, button, analytics);
           case TelegramButtonType.Activate:
             return this.activate.runCallback(message, button, analytics);
+          case TelegramButtonType.Participants:
+            return this.team.runCallback(message, button, analytics);
           default:
             throw new Error("Unknown type passed in callback query");
         }

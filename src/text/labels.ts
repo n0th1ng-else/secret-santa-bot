@@ -24,6 +24,7 @@ export enum LabelId {
   StartCommandDescription,
   EventCommandDescription,
   ListCommandDescription,
+  ParticipantsText,
 }
 
 export const labels = {
@@ -53,6 +54,7 @@ export const labels = {
       "Тайный Санта активирован! Скоро вы получите свою цель.\nВы всегда можете посмотреть детали в подробностях розыгрыша с помощью команды /list",
     [LabelId.DeliveryText]: "TODO",
     [LabelId.ParticipantsBtn]: "Участники 💃🏻🕺🏻",
+    [LabelId.ParticipantsText]: "Участники розыгрыша:",
   },
   [LanguageCode.En]: {
     [LabelId.StartCommandDescription]: "Say hello and see bot info",
