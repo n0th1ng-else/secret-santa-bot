@@ -22,6 +22,10 @@ export function isEventMessage(
   return isCommandMessage(model, BotCommand.Event, msg && msg.text);
 }
 
+export function isListMessage(model: BotMessageModel, msg: TgMessage): boolean {
+  return isCommandMessage(model, BotCommand.List, msg && msg.text);
+}
+
 function isCommandMessage(
   model: BotMessageModel,
   command: BotCommand,
@@ -118,6 +122,14 @@ export function getLanguageByText(
 
 export function getButtonTypeByText(type: string): TelegramButtonType {
   switch (type) {
+    case TelegramButtonType.Event:
+      return TelegramButtonType.Event;
+    case TelegramButtonType.Buddy:
+      return TelegramButtonType.Buddy;
+    case TelegramButtonType.EventLink:
+      return TelegramButtonType.EventLink;
+    case TelegramButtonType.Activate:
+      return TelegramButtonType.Activate;
     default:
       return TelegramButtonType.Unknown;
   }

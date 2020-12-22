@@ -119,6 +119,10 @@ export class TelegramBotModel {
       return this.actions.event.runAction(msg, model, prefix);
     }
 
+    if (this.actions.list.runCondition(msg, model)) {
+      return this.actions.list.runAction(msg, model, prefix);
+    }
+
     return this.actions.event.evalWizardStep(model, prefix);
   }
 

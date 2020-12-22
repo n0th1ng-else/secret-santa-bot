@@ -56,6 +56,17 @@ export class UsersClient {
     ).then((row) => getLanguageByText(row.lang_id));
   }
 
+  public getUserId(chatId: number): Promise<string> {
+    return this.getRows(chatId).then((rows) => {
+      const row = rows.shift();
+      if (!row || rows.length) {
+        throw new Error("something went wrong"); // TODO
+      }
+
+      return row.user_id;
+    });
+  }
+
   public getRows(chatId: number): Promise<UserRowScheme[]> {
     logger.info(`Looking for rows for chatId=${chatId}`);
     return this.db

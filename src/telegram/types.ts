@@ -20,6 +20,7 @@ import { AnalyticsData } from "../analytics/api/types";
 export enum BotCommand {
   Start = "/start",
   Event = "/event",
+  List = "/list",
 }
 
 export class BotMessageModel {
@@ -88,6 +89,10 @@ export class BotCommandOption {
 
 export enum TelegramButtonType {
   Unknown = "u",
+  Event = "e",
+  Buddy = "b",
+  EventLink = "el",
+  Activate = "a",
 }
 
 export class TelegramButtonModel {
