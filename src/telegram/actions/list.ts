@@ -137,7 +137,7 @@ export class ListAction extends GenericAction {
         const isOwned = isAdmin ? "😎 " : "";
 
         const myBuddyBtn = new TelegramButtonModel(
-          TelegramButtonType.Buddy,
+          TelegramButtonType.Delivery,
           event.event_id,
           prefix.id
         );
