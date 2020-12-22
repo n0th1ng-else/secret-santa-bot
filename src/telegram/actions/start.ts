@@ -7,6 +7,7 @@ import { Logger } from "../../logger";
 import { collectAnalytics } from "../../analytics";
 import { LanguageCode } from "../../text/types";
 import { EventRowScheme } from "../../db/sql/events";
+import { formEventDetails } from "../messages";
 
 const logger = new Logger("telegram-bot");
 
@@ -102,14 +103,7 @@ export class StartAction extends GenericAction {
       .then(() => this.getChatLanguage(model, prefix))
       .then((lang) => {
         const title = this.text.t(LabelId.JoinedEventText, lang);
-        const name = this.text.t(LabelId.ShareNameText, lang);
-        const budget = this.text.t(LabelId.ShareBudgetText, lang);
-
-        const messages = [title, `${name} ${event.name}`];
-        if (event.budget) {
-          messages.push(`${budget} ${event.budget}`);
-        }
-
+        const messages = [title, formEventDetails(lang, event)];
         return this.sendRawMessage(model.chatId, messages.join("\n"));
       });
   }

@@ -53,6 +53,11 @@ export enum TgChatType {
   Channel = "channel",
 }
 
+export enum TgParseMode {
+  Markdown = "Markdown",
+  Html = "HTML",
+}
+
 export interface TgCallbackQuery {
   id: string;
   from: TgUser;
@@ -97,6 +102,7 @@ export interface MessageDto {
   reply_markup?: {
     inline_keyboard: TgInlineKeyboardButton[][];
   };
+  parse_mode?: TgParseMode;
 }
 
 export interface EditMessageDto {

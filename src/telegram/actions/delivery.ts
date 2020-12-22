@@ -9,6 +9,8 @@ import { LabelId } from "../../text/labels";
 import { Logger } from "../../logger";
 import { AnalyticsData } from "../../analytics/api/types";
 import { LanguageCode } from "../../text/types";
+import { EventState } from "../../db/events";
+import { formUserDetails } from "../messages";
 
 const logger = new Logger("telegram-bot");
 
@@ -63,8 +65,9 @@ export class DeliveryAction extends GenericAction {
         }
 
         const agentId = relation.agent_id;
+        const isActivated = event.state === EventState.Locked;
 
-        if (!agentId) {
+        if (!agentId || !isActivated) {
           return this.sendMessage(
             model.id,
             model.chatId,
@@ -86,14 +89,7 @@ export class DeliveryAction extends GenericAction {
   ) {
     return this.stat.users.getUser(agentId).then((agent) => {
       const title = this.text.t(LabelId.ShareTitleText, lang);
-      const messages = [title];
-      if (agent.user_name) {
-        messages.push(agent.user_name);
-      }
-
-      if (agent.user_login) {
-        messages.push(agent.user_login);
-      }
+      const messages = [title, formUserDetails(lang, agent)];
 
       return this.sendRawMessage(model.chatId, messages.join("\n"));
     });

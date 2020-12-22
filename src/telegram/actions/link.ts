@@ -13,6 +13,8 @@ import { EventRowScheme } from "../../db/sql/events";
 import { WizardStep } from "../../db/wizards";
 import { WizardRowScheme } from "../../db/sql/wizards";
 import { flattenPromise } from "../../common/helpers";
+import { EventState } from "../../db/events";
+import { formEventDetails } from "../messages";
 
 const logger = new Logger("telegram-bot");
 
@@ -66,6 +68,17 @@ export class LinkAction extends GenericAction {
           );
         }
 
+        const isActivated = event.state === EventState.Locked;
+        if (isActivated) {
+          return this.sendMessage(
+            model.id,
+            model.chatId,
+            [LabelId.AlreadyActive],
+            { lang },
+            prefix
+          );
+        }
+
         return this.shareUrl(model, prefix, lang, event);
       });
   }
@@ -77,19 +90,8 @@ export class LinkAction extends GenericAction {
     event: EventRowScheme
   ) {
     const title = this.text.t(LabelId.ShareTitleText, lang);
-    const name = this.text.t(LabelId.ShareNameText, lang);
-    const budget = this.text.t(LabelId.ShareBudgetText, lang);
-    const link = this.text.t(LabelId.ShareLinkText, lang);
-
-    const url = `t.me/SantaAnonBot?start=${event.url}`;
-
-    const messages = [title, `${name} ${event.name}`];
-    if (event.budget) {
-      messages.push(`${budget} ${event.budget}`);
-    }
-
-    messages.push(`${link} ${url}`);
-
+    const eventDetails = formEventDetails(lang, event, true);
+    const messages = [title, eventDetails];
     return this.sendRawMessage(model.chatId, messages.join("\n"));
   }
 

@@ -17,6 +17,9 @@ export enum LabelId {
   JoinedEventText,
   EmptyAgentText,
   AgentTitleText,
+  AlreadyActive,
+  ActivatedText,
+  DeliveryText,
 }
 
 export const labels = {
@@ -33,10 +36,13 @@ export const labels = {
     [LabelId.ShareTitleText]: "Участвуй в розыгрыше тайного санты!",
     [LabelId.ShareNameText]: "Розыгрыш:",
     [LabelId.ShareBudgetText]: "Бюджет:",
-    [LabelId.ShareLinkText]: "Присоединяйся!",
+    [LabelId.ShareLinkText]: "Присоединяйся по ссылке:",
     [LabelId.JoinedEventText]: "Вы участвуете!",
     [LabelId.EmptyAgentText]: "Тайный санта не активирован!",
     [LabelId.AgentTitleText]: "Ваша цель:",
+    [LabelId.AlreadyActive]: "Розыгрыш уже совершен!",
+    [LabelId.ActivatedText]: "Тайный Санта активирован!",
+    [LabelId.DeliveryText]: "TODO",
   },
   [LanguageCode.En]: {},
 };

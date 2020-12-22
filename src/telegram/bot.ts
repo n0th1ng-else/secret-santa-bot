@@ -1,8 +1,7 @@
 import { TgCallbackQuery, TgMessage, TgUpdate } from "./api/types";
 import { Logger } from "../logger";
-import { LabelId } from "../text/labels";
 import { BotMessageModel, TelegramMessagePrefix } from "./types";
-import { isMessageSupported } from "./helpers";
+import { isChatGroup, isMessageSupported } from "./helpers";
 import { runPromiseWithRetry } from "../common/helpers";
 import { getMd5Hash } from "../common/hash";
 import { BotActions } from "./actions";
@@ -109,6 +108,10 @@ export class TelegramBotModel {
 
     if (!isMessageSupported(msg)) {
       return TelegramBotModel.logNotSupportedMessage(model, prefix);
+    }
+
+    if (isChatGroup(msg)) {
+      return Promise.resolve();
     }
 
     if (this.actions.start.runCondition(msg, model)) {

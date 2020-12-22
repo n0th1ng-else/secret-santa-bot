@@ -45,7 +45,7 @@ export class WizardsDb {
     });
   }
 
-  public updateEvent(wizardId: string): Promise<WizardRowScheme> {
+  public updateEvent(wizardId: string, step: string): Promise<WizardRowScheme> {
     if (!this.initialized) {
       return Promise.reject(
         new Error("The table wizards is not initialized yet")
@@ -54,7 +54,7 @@ export class WizardsDb {
     const query = WizardsSql.updateEvent;
     const eventId = nanoid(15);
     const updatedAt = new Date();
-    const values = [eventId, updatedAt, wizardId];
+    const values = [eventId, step, updatedAt, wizardId];
     return this.pool.query<WizardRowScheme>(query, values).then((queryData) => {
       const firstRow = queryData.rows.shift();
       if (!firstRow) {
