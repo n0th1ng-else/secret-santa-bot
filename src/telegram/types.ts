@@ -90,7 +90,7 @@ export class BotCommandOption {
 export enum TelegramButtonType {
   Unknown = "u",
   Event = "e",
-  Buddy = "b",
+  Delivery = "d",
   EventLink = "el",
   Activate = "a",
 }

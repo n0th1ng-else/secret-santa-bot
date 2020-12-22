@@ -59,25 +59,18 @@ export class UsersDb {
     });
   }
 
-  public updateRow(
-    userId: string,
-    userName: string,
-    userLogin: string,
-    chatId: number,
-    langId: string
-  ): Promise<UserRowScheme> {
+  public getUser(userId: string): Promise<UserRowScheme> {
     if (!this.initialized) {
       return Promise.reject(
         new Error("The table users is not initialized yet")
       );
     }
-    const query = UsersSql.updateRow;
-    const updatedAt = new Date();
-    const values = [userName, userLogin, chatId, langId, updatedAt, userId];
+    const query = UsersSql.getUser;
+    const values = [userId];
     return this.pool.query<UserRowScheme>(query, values).then((queryData) => {
       const firstRow = queryData.rows.shift();
       if (!firstRow) {
-        return Promise.reject(new Error("Unable to get updated row info"));
+        return Promise.reject(new Error("Unable to find user by id"));
       }
       return firstRow;
     });

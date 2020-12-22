@@ -15,6 +15,8 @@ export enum LabelId {
   ShareBudgetText,
   ShareLinkText,
   JoinedEventText,
+  EmptyAgentText,
+  AgentTitleText,
 }
 
 export const labels = {
@@ -33,6 +35,8 @@ export const labels = {
     [LabelId.ShareBudgetText]: "Бюджет:",
     [LabelId.ShareLinkText]: "Присоединяйся!",
     [LabelId.JoinedEventText]: "Вы участвуете!",
+    [LabelId.EmptyAgentText]: "Тайный санта не активирован!",
+    [LabelId.AgentTitleText]: "Ваша цель:",
   },
   [LanguageCode.En]: {},
 };

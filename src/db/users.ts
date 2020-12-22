@@ -67,6 +67,10 @@ export class UsersClient {
     });
   }
 
+  public getUser(userId: string): Promise<UserRowScheme> {
+    return this.db.getUser(userId);
+  }
+
   public getRows(chatId: number): Promise<UserRowScheme[]> {
     logger.info(`Looking for rows for chatId=${chatId}`);
     return this.db

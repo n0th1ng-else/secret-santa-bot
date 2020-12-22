@@ -124,8 +124,8 @@ export function getButtonTypeByText(type: string): TelegramButtonType {
   switch (type) {
     case TelegramButtonType.Event:
       return TelegramButtonType.Event;
-    case TelegramButtonType.Buddy:
-      return TelegramButtonType.Buddy;
+    case TelegramButtonType.Delivery:
+      return TelegramButtonType.Delivery;
     case TelegramButtonType.EventLink:
       return TelegramButtonType.EventLink;
     case TelegramButtonType.Activate:
